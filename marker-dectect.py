@@ -1,9 +1,11 @@
-image_path = "DJI_20240531160419_0006_V.JPG"
 import cv2
 import numpy as np
 
+image_path = "DJI_20240531160419_0006_V.JPG"
 
 img = cv2.imread(image_path)
+output = img.copy()
+
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # Detect white sheets
@@ -15,7 +17,7 @@ th = cv2.adaptiveThreshold(
 
 contours, _ = cv2.findContours(th, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-sheet_id = 0
+marker_id = 0
 
 for cnt in contours:
     area = cv2.contourArea(cnt)
@@ -34,9 +36,7 @@ for cnt in contours:
     sheet = img[y : y + h, x : x + w]
     sheet_gray = cv2.cvtColor(sheet, cv2.COLOR_BGR2GRAY)
 
-    sheet_id += 1
-
-    # ---- Detect center dots ----
+    sheet_gray = cv2.GaussianBlur(sheet_gray, (5, 5), 0)
 
     params = cv2.SimpleBlobDetector_Params()
 
@@ -44,47 +44,82 @@ for cnt in contours:
     params.blobColor = 0
 
     params.filterByArea = True
-    params.minArea = 30
-    params.maxArea = 2000
+    params.minArea = 1200
+    params.maxArea = 10000
 
     params.filterByCircularity = True
-    params.minCircularity = 0.6
+    params.minCircularity = 0.75
+
+    params.filterByInertia = True
+    params.minInertiaRatio = 0.5
+
+    params.filterByConvexity = False
 
     detector = cv2.SimpleBlobDetector_create(params)
 
     keypoints = detector.detect(sheet_gray)
 
+    # Keep largest blobs
+    keypoints = sorted(keypoints, key=lambda k: k.size, reverse=True)
+
     centers = []
 
+    sh, sw = sheet_gray.shape
+
     for kp in keypoints:
-        cx = int(kp.pt[0])
-        cy = int(kp.pt[1])
+        px, py = kp.pt
 
-        centers.append((cx, cy))
+        if px < sw * 0.15 or px > sw * 0.85:
+            continue
 
-        cv2.circle(sheet, (cx, cy), 6, (0, 255, 0), 2)
+        if py < sh * 0.15 or py > sh * 0.85:
+            continue
 
-    print(f"Sheet {sheet_id} center dots:", len(centers))
+        centers.append((int(px), int(py)))
 
-    # ---- Compute sheet orientation ----
+        if len(centers) == 4:
+            break
 
-    if len(centers) >= 4:
-        pts = np.array(centers[:4], dtype=np.float32)
+    if len(centers) != 4:
+        continue
 
-        rect = cv2.minAreaRect(pts)
+    # Compute orientation
+    pts = np.array(centers)
 
-        angle = rect[2]
+    max_dist = 0
+    p1 = None
+    p2 = None
 
-        print("Sheet angle:", angle)
+    for i in range(4):
+        for j in range(i + 1, 4):
+            d = np.linalg.norm(pts[i] - pts[j])
 
-        cv2.putText(
-            sheet,
-            f"Angle {angle:.2f}",
-            (20, 40),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (0, 0, 255),
-            2,
-        )
+            if d > max_dist:
+                max_dist = d
+                p1 = pts[i]
+                p2 = pts[j]
 
-    cv2.imwrite(f"sheet_{sheet_id}.jpg", sheet)
+    dx = p2[0] - p1[0]
+    dy = p2[1] - p1[1]
+
+    angle = np.degrees(np.arctan2(dy, dx))
+
+    marker_id += 1
+
+    # Draw bounding box
+    cv2.rectangle(output, (x, y), (x + w, y + h), (0, 255, 0), 3)
+
+    # Draw center dots
+    for cx, cy in centers:
+        cv2.circle(output, (x + cx, y + cy), 8, (0, 0, 255), -1)
+
+    # Label
+    label = f"Marker {marker_id} | Angle {angle:.2f}"
+
+    cv2.putText(
+        output, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2
+    )
+
+print("Markers detected:", marker_id)
+
+cv2.imwrite("detected_markers.jpg", output)
