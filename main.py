@@ -87,4 +87,4 @@ for i, (camera, calib_camera) in enumerate(
     with Image.open(img_path) as img:
         rr.log(entity + "/image/rgb", rr.Image(img))
 
-rr.log("world/camera_path", rr.LineStrips3D(np.array(positions)), static=True)
+rr.log("world/camera_path", rr.LineStrips3D([np.array(positions)]), static=True)
