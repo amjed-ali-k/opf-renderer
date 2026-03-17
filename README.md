@@ -7,6 +7,11 @@ This project contains two main scripts:
 
 The first script assigns raw marker detections to world-space bounding boxes. The second script visualizes the result in Rerun and also exports annotated images.
 
+## Prerequisites
+
+Install `uv` cli.
+Run `uv sync` to install dependencies.
+
 ## Workflow
 
 1. Start with a raw marker CSV such as `final.csv`.
@@ -57,7 +62,7 @@ You do not need the full OPF object model for this script. These files are suffi
 ### Example
 
 ```bash
-.venv/bin/python assign_markers_to_bboxes.py \
+uv run assign_markers_to_bboxes.py \
   --marker-csv sample/final.csv \
   --bbox-csv sample/paper_bboxes.csv \
   --opf-root sample \
@@ -120,7 +125,7 @@ It does the following:
 ### Example
 
 ```bash
-.venv/bin/python view_papers_in_rerun.py \
+uv run view_papers_in_rerun.py \
   --csv sample/final_bbox_prefixed.csv \
   --opf sample \
   --output-images modified_images_paper_view
@@ -169,7 +174,7 @@ The viewer currently reports:
 Assign markers:
 
 ```bash
-.venv/bin/python assign_markers_to_bboxes.py \
+uv run assign_markers_to_bboxes.py \
   --marker-csv sample/final.csv \
   --bbox-csv sample/paper_bboxes.csv \
   --opf-root sample \
@@ -179,7 +184,7 @@ Assign markers:
 Visualize:
 
 ```bash
-.venv/bin/python view_papers_in_rerun.py \
+uv run view_papers_in_rerun.py \
   --csv sample/final_bbox_prefixed.csv \
   --opf sample \
   --output-images modified_images_paper_view
