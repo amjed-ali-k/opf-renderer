@@ -1,0 +1,1084 @@
+{
+  "captures": [
+    {
+      "cameras": [
+        {
+          "id": 14625337645072922178,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.962980638888894,
+          -84.22082386111111,
+          284.893
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02524000033736229,
+          0.02806999906897545,
+          0.06550999730825424
+        ]
+      },
+      "height_above_takeoff_m": 1.781999945640564,
+      "id": 14625337645072922178,
+      "orientation": {
+        "angles_deg": [
+          -148.49999999999022,
+          10.099998474120436,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 14625337645072922178,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:29"
+    },
+    {
+      "cameras": [
+        {
+          "id": 9618199760706079159,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96298072222223,
+          -84.22082427777778,
+          284.904
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02525000087916851,
+          0.027979999780654907,
+          0.06533999741077423
+        ]
+      },
+      "height_above_takeoff_m": 1.8250000476837158,
+      "id": 9618199760706079159,
+      "orientation": {
+        "angles_deg": [
+          -143.9999999999905,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 9618199760706079159,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:30"
+    },
+    {
+      "cameras": [
+        {
+          "id": 4154415463878073609,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.962978500000006,
+          -84.22081705555556,
+          284.876
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02508999966084957,
+          0.026590000838041306,
+          0.06151999905705452
+        ]
+      },
+      "height_above_takeoff_m": 1.8109999895095825,
+      "id": 4154415463878073609,
+      "orientation": {
+        "angles_deg": [
+          -144.39999389647485,
+          10.099998474120436,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 4154415463878073609,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:39"
+    },
+    {
+      "cameras": [
+        {
+          "id": 13341921761736785553,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.962978250000006,
+          -84.22081672222222,
+          284.883
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.025019999593496323,
+          0.026569999754428864,
+          0.061500001698732376
+        ]
+      },
+      "height_above_takeoff_m": 1.7949999570846558,
+      "id": 13341921761736785553,
+      "orientation": {
+        "angles_deg": [
+          -142.69999694823278,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 13341921761736785553,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:40"
+    },
+    {
+      "cameras": [
+        {
+          "id": 3480857716536857858,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297816666667,
+          -84.22081658333333,
+          284.893
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02498999983072281,
+          0.02662000060081482,
+          0.06145999953150749
+        ]
+      },
+      "height_above_takeoff_m": 1.8079999685287476,
+      "id": 3480857716536857858,
+      "orientation": {
+        "angles_deg": [
+          -137.69999694823312,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 3480857716536857858,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:41"
+    },
+    {
+      "cameras": [
+        {
+          "id": 97050951520147424,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297741666667,
+          -84.22081605555556,
+          284.898
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02498999983072281,
+          0.026669999584555626,
+          0.061409998685121536
+        ]
+      },
+      "height_above_takeoff_m": 1.812000036239624,
+      "id": 97050951520147424,
+      "orientation": {
+        "angles_deg": [
+          -132.1999969482335,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 97050951520147424,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:42"
+    },
+    {
+      "cameras": [
+        {
+          "id": 1858190916725406621,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297630555556,
+          -84.22081569444444,
+          284.901
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.024870000779628754,
+          0.026399999856948853,
+          0.060920000076293945
+        ]
+      },
+      "height_above_takeoff_m": 1.812999963760376,
+      "id": 1858190916725406621,
+      "orientation": {
+        "angles_deg": [
+          -126.80000305174947,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 1858190916725406621,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:43"
+    },
+    {
+      "cameras": [
+        {
+          "id": 8542183222985592831,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297630555556,
+          -84.22081497222223,
+          284.903
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.024790000170469284,
+          0.026440000161528587,
+          0.060839999467134476
+        ]
+      },
+      "height_above_takeoff_m": 1.8259999752044678,
+      "id": 8542183222985592831,
+      "orientation": {
+        "angles_deg": [
+          -121.09999847411314,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 8542183222985592831,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:44"
+    },
+    {
+      "cameras": [
+        {
+          "id": 898077372480809821,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297630555556,
+          -84.22081441666667,
+          284.905
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02419999986886978,
+          0.025830000638961792,
+          0.0581200011074543
+        ]
+      },
+      "height_above_takeoff_m": 1.8240000009536743,
+      "id": 898077372480809821,
+      "orientation": {
+        "angles_deg": [
+          -115.80000305175018,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 898077372480809821,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:45"
+    },
+    {
+      "cameras": [
+        {
+          "id": 7889007414741907554,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297519444445,
+          -84.220814,
+          284.916
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.024119999259710312,
+          0.0258799996227026,
+          0.05796999856829643
+        ]
+      },
+      "height_above_takeoff_m": 1.812999963760376,
+      "id": 7889007414741907554,
+      "orientation": {
+        "angles_deg": [
+          -110.9999999999927,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 7889007414741907554,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:46"
+    },
+    {
+      "cameras": [
+        {
+          "id": 6393285838707423383,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297444444445,
+          -84.22081352777778,
+          284.945
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.023989999666810036,
+          0.025429999455809593,
+          0.055709999054670334
+        ]
+      },
+      "height_above_takeoff_m": 1.843000054359436,
+      "id": 6393285838707423383,
+      "orientation": {
+        "angles_deg": [
+          -105.80000305175086,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 6393285838707423383,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:47"
+    },
+    {
+      "cameras": [
+        {
+          "id": 17537263819865883326,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297391666667,
+          -84.22081322222222,
+          284.945
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.024059999734163284,
+          0.024720000103116035,
+          0.05502000078558922
+        ]
+      },
+      "height_above_takeoff_m": 1.875,
+      "id": 17537263819865883326,
+      "orientation": {
+        "angles_deg": [
+          -100.30000305175122,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 17537263819865883326,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:48"
+    },
+    {
+      "cameras": [
+        {
+          "id": 11636260596281058944,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.962973222222224,
+          -84.22081316666667,
+          284.924
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.023989999666810036,
+          0.024490000680088997,
+          0.054510001093149185
+        ]
+      },
+      "height_above_takeoff_m": 1.850000023841858,
+      "id": 11636260596281058944,
+      "orientation": {
+        "angles_deg": [
+          -94.90000152587265,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 11636260596281058944,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:49"
+    },
+    {
+      "cameras": [
+        {
+          "id": 7334829045392059004,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297252777778,
+          -84.22081308333334,
+          284.925
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.023979999125003815,
+          0.0243500005453825,
+          0.05398999899625778
+        ]
+      },
+      "height_above_takeoff_m": 1.819000005722046,
+      "id": 7334829045392059004,
+      "orientation": {
+        "angles_deg": [
+          -89.69999694823629,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 7334829045392059004,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:50"
+    },
+    {
+      "cameras": [
+        {
+          "id": 17435606316935119979,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297191666667,
+          -84.22081283333334,
+          284.928
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.024010000750422478,
+          0.024229999631643295,
+          0.053619999438524246
+        ]
+      },
+      "height_above_takeoff_m": 1.843000054359436,
+      "id": 17435606316935119979,
+      "orientation": {
+        "angles_deg": [
+          -84.59999847411552,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 17435606316935119979,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:51"
+    },
+    {
+      "cameras": [
+        {
+          "id": 6546461088911050161,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297088888889,
+          -84.22081280555555,
+          284.931
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02394000068306923,
+          0.02419999986886978,
+          0.05347000062465668
+        ]
+      },
+      "height_above_takeoff_m": 1.8420000076293945,
+      "id": 6546461088911050161,
+      "orientation": {
+        "angles_deg": [
+          -79.59999847411585,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 6546461088911050161,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:52"
+    },
+    {
+      "cameras": [
+        {
+          "id": 3317208740005071053,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96297033333334,
+          -84.22081275000001,
+          284.937
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.0239499993622303,
+          0.024250000715255737,
+          0.05297999829053879
+        ]
+      },
+      "height_above_takeoff_m": 1.8450000286102295,
+      "id": 3317208740005071053,
+      "orientation": {
+        "angles_deg": [
+          -73.99999999999513,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 3317208740005071053,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:53"
+    },
+    {
+      "cameras": [
+        {
+          "id": 16356701168971411574,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96296941666667,
+          -84.22081311111111,
+          284.934
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.023719999939203262,
+          0.023919999599456787,
+          0.052629999816417694
+        ]
+      },
+      "height_above_takeoff_m": 1.8569999933242798,
+      "id": 16356701168971411574,
+      "orientation": {
+        "angles_deg": [
+          -68.59999847411657,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 16356701168971411574,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:54"
+    },
+    {
+      "cameras": [
+        {
+          "id": 7378597631254849643,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.962968833333335,
+          -84.2208135,
+          284.933
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02370999939739704,
+          0.023979999125003815,
+          0.052549999207258224
+        ]
+      },
+      "height_above_takeoff_m": 1.8459999561309814,
+      "id": 7378597631254849643,
+      "orientation": {
+        "angles_deg": [
+          -62.799999237056404,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 7378597631254849643,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:55"
+    },
+    {
+      "cameras": [
+        {
+          "id": 680846517130171018,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96296808333334,
+          -84.22081372222222,
+          284.936
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.023669999092817307,
+          0.023910000920295715,
+          0.052310001105070114
+        ]
+      },
+      "height_above_takeoff_m": 1.8380000591278076,
+      "id": 680846517130171018,
+      "orientation": {
+        "angles_deg": [
+          -57.20000076293569,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 680846517130171018,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:56"
+    },
+    {
+      "cameras": [
+        {
+          "id": 17016241806181714686,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.962967444444445,
+          -84.22081391666667,
+          284.928
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.023569999262690544,
+          0.02370999939739704,
+          0.051910001784563065
+        ]
+      },
+      "height_above_takeoff_m": 1.8459999561309814,
+      "id": 17016241806181714686,
+      "orientation": {
+        "angles_deg": [
+          -51.79999923705713,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 17016241806181714686,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:57"
+    },
+    {
+      "cameras": [
+        {
+          "id": 8881055767475475152,
+          "model_source": "database",
+          "pixel_range": {
+            "max": 255.0,
+            "min": 0.0
+          },
+          "pixel_type": "uint8",
+          "sensor_id": 6944609484041165725
+        }
+      ],
+      "geolocation": {
+        "coordinates": [
+          33.96296691666667,
+          -84.22081419444444,
+          284.934
+        ],
+        "crs": {
+          "definition": "EPSG:4326"
+        },
+        "sigmas": [
+          0.02360999956727028,
+          0.023760000243782997,
+          0.05186999961733818
+        ]
+      },
+      "height_above_takeoff_m": 1.8519999980926514,
+      "id": 8881055767475475152,
+      "orientation": {
+        "angles_deg": [
+          -46.299999237057506,
+          9.999999999999343,
+          0.0
+        ],
+        "sigmas_deg": [
+          14.99999999999901,
+          9.999999999999341,
+          9.999999999999341
+        ],
+        "type": "yaw_pitch_roll"
+      },
+      "reference_camera_id": 8881055767475475152,
+      "rig_model_source": "database",
+      "time": "2024-05-31T16:04:58"
+    }
+  ],
+  "format": "application/opf-input-cameras+json",
+  "sensors": [
+    {
+      "bands": [
+        {
+          "central_wavelength_nm": 660,
+          "weight": 0.2126
+        },
+        {
+          "central_wavelength_nm": 550,
+          "weight": 0.7152
+        },
+        {
+          "central_wavelength_nm": 470,
+          "weight": 0.0722
+        }
+      ],
+      "id": 6944609484041165725,
+      "image_size_px": [
+        5280,
+        3956
+      ],
+      "internals": {
+        "distortion_type": "radial3_tangential2",
+        "focal_length_px": 3713.29,
+        "principal_point_px": [
+          2647.02,
+          1969.28
+        ],
+        "radial_distortion": [
+          -0.11257524,
+          0.01487443,
+          -0.02706411
+        ],
+        "tangential_distortion": [
+          -8.572e-05,
+          1e-07
+        ],
+        "type": "perspective"
+      },
+      "name": "DJI_M3E_12.3_5280x3956",
+      "pixel_size_um": 3.3,
+      "shutter_type": "global"
+    }
+  ],
+  "version": "1.1"
+}

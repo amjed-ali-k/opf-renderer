@@ -1,8 +1,20 @@
 from __future__ import annotations
+"""Assign raw marker detections to footing/paper bounding boxes.
+
+This executable is the production entrypoint for the bbox-prefixing flow:
+1. Load OPF sidecar JSON files for camera poses, intrinsics, and control points.
+2. Project 2D marker detections from the raw CSV onto the reconstructed ground plane.
+3. Match each projected point against axis-aligned XY bounding boxes.
+4. Prefix the marker ID with the matched bbox/footing ID and write a new CSV.
+
+The script intentionally avoids loading the full OPF object model for speed.
+"""
 
 import argparse
 import csv
 import json
+import math
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,6 +23,8 @@ import numpy as np
 
 @dataclass(frozen=True)
 class CameraModel:
+    """Minimal calibrated camera state needed for 2D-to-3D back-projection."""
+
     image_name: str
     position: np.ndarray
     rotation_world_from_camera: np.ndarray
@@ -20,12 +34,16 @@ class CameraModel:
 
 @dataclass(frozen=True)
 class Plane:
+    """Ground plane estimated from calibrated control points."""
+
     origin: np.ndarray
     normal: np.ndarray
 
 
 @dataclass(frozen=True)
 class BoundingBox:
+    """Axis-aligned world-space bbox used to label projected markers."""
+
     bbox_id: str
     bottom_x: float
     bottom_y: float
@@ -35,7 +53,21 @@ class BoundingBox:
     top_z: float
 
 
+@dataclass(frozen=True)
+class BoundingBoxIndex:
+    """Simple uniform-grid accelerator for bbox lookup in XY."""
+
+    cell_size_x: float
+    cell_size_y: float
+    min_x: float
+    min_y: float
+    cells: dict[tuple[int, int], list[BoundingBox]]
+    fallback_boxes: list[BoundingBox]
+
+
 def rotation_from_opk(orientation_deg: np.ndarray) -> np.ndarray:
+    """Convert OPF omega/phi/kappa camera orientation into a world transform."""
+
     omega, phi, kappa = np.deg2rad(orientation_deg)
     return (
         np.array(
@@ -63,11 +95,15 @@ def rotation_from_opk(orientation_deg: np.ndarray) -> np.ndarray:
 
 
 def load_json(path: Path) -> dict:
+    """Load a UTF-8 JSON file from disk."""
+
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
 
 
 def resolve_opf_paths(args: argparse.Namespace) -> dict[str, Path]:
+    """Resolve the minimal OPF sidecar JSON inputs needed by this executable."""
+
     if args.opf_json_dir is not None:
         opf_json_dir = args.opf_json_dir
     elif args.opf_root is not None:
@@ -88,6 +124,8 @@ def build_camera_models(
     calibrated_cameras_json: Path,
     input_cameras_json: Path,
 ) -> dict[str, CameraModel]:
+    """Build an image-name keyed camera model map from OPF sidecar JSON."""
+
     camera_list = load_json(camera_list_json)
     calibrated_cameras = load_json(calibrated_cameras_json)
     input_cameras = load_json(input_cameras_json)
@@ -126,6 +164,8 @@ def build_camera_models(
 
 
 def fit_plane(control_points_json: Path) -> Plane:
+    """Fit a best-fit plane through the calibrated control points."""
+
     calibrated_control_points = load_json(control_points_json)
     points = np.asarray(
         [point["coordinates"] for point in calibrated_control_points["points"]],
@@ -142,6 +182,8 @@ def fit_plane(control_points_json: Path) -> Plane:
 
 
 def orient_plane_toward_cameras(plane: Plane, camera_models: dict[str, CameraModel]) -> Plane:
+    """Flip the plane normal so it faces the camera set consistently."""
+
     camera_positions = np.asarray([camera.position for camera in camera_models.values()], dtype=float)
     normal = plane.normal
     if np.dot(normal, camera_positions.mean(axis=0) - plane.origin) < 0:
@@ -150,6 +192,8 @@ def orient_plane_toward_cameras(plane: Plane, camera_models: dict[str, CameraMod
 
 
 def load_marker_rows(marker_csv: Path) -> list[dict[str, str]]:
+    """Load the raw marker CSV and normalize image paths down to file names."""
+
     rows: list[dict[str, str]] = []
     with marker_csv.open(newline="", encoding="utf-8") as handle:
         reader = csv.reader(handle)
@@ -168,27 +212,29 @@ def load_marker_rows(marker_csv: Path) -> list[dict[str, str]]:
     return rows
 
 
-def project_to_plane(camera: CameraModel, plane: Plane, x_px: float, y_px: float) -> np.ndarray:
-    camera_ray = np.array(
-        [
-            (x_px - camera.principal_point_px[0]) / camera.focal_length_px,
-            -(y_px - camera.principal_point_px[1]) / camera.focal_length_px,
-            -1.0,
-        ],
-        dtype=float,
+def project_points_to_plane(camera: CameraModel, plane: Plane, pixels_xy: np.ndarray) -> np.ndarray:
+    # Project all detections from the same image together. This removes Python loop overhead
+    # and lets NumPy handle the matrix math in one batch.
+    camera_rays = np.column_stack(
+        (
+            (pixels_xy[:, 0] - camera.principal_point_px[0]) / camera.focal_length_px,
+            -(pixels_xy[:, 1] - camera.principal_point_px[1]) / camera.focal_length_px,
+            -np.ones(len(pixels_xy), dtype=float),
+        )
     )
-    camera_ray /= np.linalg.norm(camera_ray)
-    world_ray = camera.rotation_world_from_camera @ camera_ray
+    camera_rays /= np.linalg.norm(camera_rays, axis=1, keepdims=True)
+    world_rays = camera_rays @ camera.rotation_world_from_camera.T
 
-    denominator = float(np.dot(plane.normal, world_ray))
-    if abs(denominator) < 1e-8:
+    denominators = world_rays @ plane.normal
+    if np.any(np.abs(denominators) < 1e-8):
         raise ValueError(f"Ray is parallel to the fitted plane for image {camera.image_name}")
 
-    distance = float(np.dot(plane.normal, plane.origin - camera.position) / denominator)
-    if distance <= 0:
+    numerator = float(np.dot(plane.normal, plane.origin - camera.position))
+    distances = numerator / denominators
+    if np.any(distances <= 0):
         raise ValueError(f"Plane intersection is behind the camera for image {camera.image_name}")
 
-    return camera.position + distance * world_ray
+    return camera.position + distances[:, None] * world_rays
 
 
 def load_bboxes(
@@ -196,6 +242,8 @@ def load_bboxes(
     default_bottom_z: float,
     default_top_z: float,
 ) -> list[BoundingBox]:
+    """Load bbox rows, filling in Z values when the input CSV omits them."""
+
     with bbox_csv.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         required = {"id", "bottomX", "bottomY", "topX", "topY"}
@@ -221,34 +269,95 @@ def load_bboxes(
     return boxes
 
 
-def assign_rows(
+def build_bbox_index(boxes: list[BoundingBox]) -> BoundingBoxIndex:
+    """Build a coarse XY grid so each marker checks only nearby boxes."""
+
+    widths = [max(box.top_x - box.bottom_x, 1e-6) for box in boxes]
+    heights = [max(box.top_y - box.bottom_y, 1e-6) for box in boxes]
+    cell_size_x = max(float(np.median(widths)), 1e-6)
+    cell_size_y = max(float(np.median(heights)), 1e-6)
+    min_x = min(box.bottom_x for box in boxes)
+    min_y = min(box.bottom_y for box in boxes)
+
+    cells: dict[tuple[int, int], list[BoundingBox]] = defaultdict(list)
+    sorted_boxes = sorted(
+        boxes,
+        key=lambda box: (box.top_x - box.bottom_x) * (box.top_y - box.bottom_y),
+    )
+    for box in sorted_boxes:
+        # A box may span multiple cells, so register it in every overlapped bucket.
+        start_ix = math.floor((box.bottom_x - min_x) / cell_size_x)
+        end_ix = math.floor((box.top_x - min_x) / cell_size_x)
+        start_iy = math.floor((box.bottom_y - min_y) / cell_size_y)
+        end_iy = math.floor((box.top_y - min_y) / cell_size_y)
+        for ix in range(start_ix, end_ix + 1):
+            for iy in range(start_iy, end_iy + 1):
+                cells[(ix, iy)].append(box)
+
+    return BoundingBoxIndex(
+        cell_size_x=cell_size_x,
+        cell_size_y=cell_size_y,
+        min_x=min_x,
+        min_y=min_y,
+        cells=dict(cells),
+        fallback_boxes=sorted_boxes,
+    )
+
+
+def lookup_bbox(point_world: np.ndarray, bbox_index: BoundingBoxIndex) -> BoundingBox | None:
+    """Return the first bbox containing the projected point, or None."""
+
+    ix = math.floor((point_world[0] - bbox_index.min_x) / bbox_index.cell_size_x)
+    iy = math.floor((point_world[1] - bbox_index.min_y) / bbox_index.cell_size_y)
+    candidates = bbox_index.cells.get((ix, iy), bbox_index.fallback_boxes)
+    for box in candidates:
+        if box.bottom_x <= point_world[0] <= box.top_x and box.bottom_y <= point_world[1] <= box.top_y:
+            return box
+    return None
+
+
+def project_marker_rows(
     marker_rows: list[dict[str, str]],
     camera_models: dict[str, CameraModel],
     plane: Plane,
-    boxes: list[BoundingBox],
-) -> list[dict[str, str]]:
-    assigned_rows: list[dict[str, str]] = []
+) -> list[dict[str, object]]:
+    """Project raw marker detections into world space, grouped by source image."""
+
+    per_image: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in marker_rows:
-        image_name = row["image_name"]
+        per_image[row["image_name"]].append(row)
+
+    projected_rows: list[dict[str, object]] = []
+    for image_name, rows in per_image.items():
         if image_name not in camera_models:
             raise KeyError(f"Image {image_name} not present in OPF camera metadata")
 
-        world_point = project_to_plane(
-            camera_models[image_name],
-            plane,
-            float(row["x_px"]),
-            float(row["y_px"]),
+        # All rows from the same image share the same camera, so project them in one batch.
+        pixels_xy = np.asarray(
+            [[float(row["x_px"]), float(row["y_px"])] for row in rows],
+            dtype=float,
         )
-        matches = [
-            box
-            for box in boxes
-            if box.bottom_x <= world_point[0] <= box.top_x
-            and box.bottom_y <= world_point[1] <= box.top_y
-        ]
-        if len(matches) > 1:
-            matches.sort(key=lambda box: (box.top_x - box.bottom_x) * (box.top_y - box.bottom_y))
+        world_points = project_points_to_plane(camera_models[image_name], plane, pixels_xy)
+        for row, world_point in zip(rows, world_points, strict=False):
+            projected_rows.append(
+                {
+                    **row,
+                    "world_point": world_point,
+                }
+            )
+    return projected_rows
 
-        box = matches[0] if matches else None
+
+def assign_rows(
+    projected_rows: list[dict[str, object]],
+    bbox_index: BoundingBoxIndex,
+) -> list[dict[str, str]]:
+    """Match projected markers to bboxes and build the output CSV rows."""
+
+    assigned_rows: list[dict[str, str]] = []
+    for row in projected_rows:
+        world_point = np.asarray(row["world_point"], dtype=float)
+        box = lookup_bbox(world_point, bbox_index)
         bbox_id = box.bbox_id if box is not None else "UNASSIGNED"
         prefixed_marker_id = (
             f"{bbox_id}_{row['marker_id']}" if box is not None else row["marker_id"]
@@ -256,13 +365,13 @@ def assign_rows(
 
         assigned_rows.append(
             {
-                "image_name": image_name,
+                "image_name": str(row["image_name"]),
                 "bbox_id": bbox_id,
                 "prefixed_marker_id": prefixed_marker_id,
-                "marker_id": row["marker_id"],
+                "marker_id": str(row["marker_id"]),
                 "x_px": f"{float(row['x_px']):.2f}",
                 "y_px": f"{float(row['y_px']):.2f}",
-                "score": row["score"] if row["score"] else "1.0",
+                "score": str(row["score"]) if row["score"] else "1.0",
                 "world_x": f"{world_point[0]:.6f}",
                 "world_y": f"{world_point[1]:.6f}",
                 "world_z": f"{world_point[2]:.6f}",
@@ -272,6 +381,8 @@ def assign_rows(
 
 
 def write_output_csv(rows: list[dict[str, str]], output_csv: Path) -> None:
+    """Write the final bbox-prefixed marker CSV in a stable sorted order."""
+
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     with output_csv.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
@@ -304,6 +415,8 @@ def write_output_csv(rows: list[dict[str, str]], output_csv: Path) -> None:
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse CLI arguments for marker CSV, bbox CSV, and OPF metadata locations."""
+
     parser = argparse.ArgumentParser(
         description=(
             "Assign markers from a raw CSV into bounding boxes using OPF sidecar JSON metadata "
@@ -337,6 +450,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Run the full marker-to-bbox assignment pipeline."""
+
     args = parse_args()
     paths = resolve_opf_paths(args)
     camera_models = build_camera_models(
@@ -347,17 +462,15 @@ def main() -> None:
     plane = orient_plane_toward_cameras(fit_plane(paths["control_points"]), camera_models)
 
     marker_rows = load_marker_rows(args.marker_csv)
-    world_points = [
-        project_to_plane(camera_models[row["image_name"]], plane, float(row["x_px"]), float(row["y_px"]))
-        for row in marker_rows
-    ]
-    all_z = [point[2] for point in world_points]
+    projected_rows = project_marker_rows(marker_rows, camera_models, plane)
+    all_z = [float(np.asarray(row["world_point"])[2]) for row in projected_rows]
     boxes = load_bboxes(
         args.bbox_csv,
         default_bottom_z=min(all_z) - args.bbox_padding_z,
         default_top_z=max(all_z) + args.bbox_padding_z,
     )
-    assigned_rows = assign_rows(marker_rows, camera_models, plane, boxes)
+    bbox_index = build_bbox_index(boxes)
+    assigned_rows = assign_rows(projected_rows, bbox_index)
     write_output_csv(assigned_rows, args.output_csv)
 
     assigned_count = sum(1 for row in assigned_rows if row["bbox_id"] != "UNASSIGNED")
