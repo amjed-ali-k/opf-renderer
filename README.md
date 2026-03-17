@@ -96,7 +96,7 @@ In the real construction workflow, this would become something like:
 footing_102_marker_7
 ```
 
-## Script 2: View Papers In Rerun
+## Script 2: View BBoxes In Rerun
 
 [`view_papers_in_rerun.py`](/home/amjed/git/opf-renderer/view_papers_in_rerun.py) visualizes the prefixed CSV together with the OPF point cloud.
 
