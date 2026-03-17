@@ -6,7 +6,7 @@ import numpy as np
 from PIL import Image
 from pathlib import Path
 
-project_path = Path("opf/project.opf")
+project_path = Path("opf2/project.opf")
 
 project = load(str(project_path))
 project = resolve(project)

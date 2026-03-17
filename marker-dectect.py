@@ -95,10 +95,8 @@ def detect_4_centers_on_warp(warped):
     gray = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    # Dark print on white sheet
     _, th = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-    # Cleanup
     kernel = np.ones((3, 3), np.uint8)
     th = cv2.morphologyEx(th, cv2.MORPH_OPEN, kernel, iterations=1)
 
@@ -106,7 +104,6 @@ def detect_4_centers_on_warp(warped):
 
     H, W = gray.shape
 
-    # Expected centers of the 4 markers in normalized sheet coordinates
     expected = [
         (W * 0.25, H * 0.25),  # top-left
         (W * 0.75, H * 0.25),  # top-right
@@ -123,11 +120,9 @@ def detect_4_centers_on_warp(warped):
             x, y, w, h, area = stats[i]
             cx, cy = centroids[i]
 
-            # keep only medium dark blobs
             if area < 500 or area > 6000:
                 continue
 
-            # stay near this quadrant
             if not (ex - W * 0.22 <= cx <= ex + W * 0.22):
                 continue
             if not (ey - H * 0.22 <= cy <= ey + H * 0.22):
@@ -138,7 +133,6 @@ def detect_4_centers_on_warp(warped):
             if circ < 0.65:
                 continue
 
-            # Prefer circular blobs near expected quadrant center
             dist = np.hypot(cx - ex, cy - ey)
             score = circ * 10.0 + area * 0.001 - dist * 0.02
 
@@ -164,13 +158,22 @@ def map_points_back(points, Minv):
     return mapped
 
 
-def compute_sheet_angle_from_quad(quad):
-    # use top edge of sheet
-    tl, tr, br, bl = quad
-    dx = tr[0] - tl[0]
-    dy = tr[1] - tl[1]
-    angle = np.degrees(np.arctan2(dy, dx))
-    return angle
+def compute_angle_from_4_centers(centers):
+    pts = np.array(centers, dtype=np.float32)
+
+    # Order the 4 centers like a quadrilateral
+    ordered = order_quad_points(pts)
+    tl, tr, br, bl = ordered
+
+    # Use the top side of the square formed by the centers
+    top_vec = tr - tl
+    bottom_vec = br - bl
+
+    # average both horizontal directions for stability
+    vec = (top_vec + bottom_vec) / 2.0
+
+    angle = np.degrees(np.arctan2(vec[1], vec[0]))
+    return angle, ordered
 
 
 def main():
@@ -187,7 +190,6 @@ def main():
 
     for sheet in sheets:
         quad = sheet["quad"]
-        x, y, w, h = sheet["bbox"]
 
         warped, M, Minv = warp_sheet(img, quad, out_w=600, out_h=800)
         centers_warp, debug_th = detect_4_centers_on_warp(warped)
@@ -195,24 +197,24 @@ def main():
 
         found_count = sum(c is not None for c in centers_img)
         if found_count < 4:
-            # still draw the sheet box, but skip marker labeling if centers incomplete
             cv2.polylines(output, [quad.astype(np.int32)], True, (0, 255, 255), 2)
             continue
 
+        angle, ordered_centers = compute_angle_from_4_centers(centers_img)
+
         marker_id += 1
 
-        angle = compute_sheet_angle_from_quad(quad)
-
-        # Draw sheet outline
         cv2.polylines(output, [quad.astype(np.int32)], True, (0, 255, 0), 3)
 
-        # Draw detected centers
         for c in centers_img:
             cx, cy = int(round(c[0])), int(round(c[1]))
             cv2.circle(output, (cx, cy), 8, (0, 0, 255), -1)
             cv2.circle(output, (cx, cy), 16, (255, 0, 0), 2)
 
-        # Label
+        # draw square edges between detected centers
+        ordered_int = ordered_centers.astype(np.int32)
+        cv2.polylines(output, [ordered_int], True, (255, 255, 0), 2)
+
         label = f"Marker {marker_id} | Angle {angle:.2f}"
         text_x = int(quad[0][0])
         text_y = max(30, int(quad[0][1]) - 10)
