@@ -189,3 +189,42 @@ uv run view_papers_in_rerun.py \
   --opf sample \
   --output-images modified_images_paper_view
 ```
+
+## Script 3: Extract Green Square Footings From DXF
+
+[`extract_green_squares_only.py`](/home/amjed/git/opf-renderer/extract_green_squares_only.py) reads a DXF (e.g. `sample.dxf`), detects **green square boxes** (AutoCAD Color Index \(ACI\)=3), and exports:
+
+- a DXF containing **only** those detected squares (as closed `LWPOLYLINE`s on layer `GREEN_SQUARES_ONLY`)
+- a bbox CSV compatible with `sample/paper_bboxes.csv` format, using IDs `footing_001`, `footing_002`, … with `bottomZ=topZ=0`
+
+### Example
+
+Create a squares-only DXF plus a footing bbox CSV:
+
+```bash
+uv run --with ezdxf python extract_green_squares_only.py \
+  --input sample.dxf \
+  --output green_squares_only.dxf \
+  --csv-output sample/footing_bboxes.csv
+```
+
+Filter by square width (in DXF drawing units):
+
+```bash
+uv run --with ezdxf python extract_green_squares_only.py \
+  --input sample.dxf \
+  --output green_squares_only_filtered.dxf \
+  --csv-output sample/footing_bboxes.csv \
+  --min-width 6.9 \
+  --max-width 7.1
+```
+
+Optional: also write a detailed CSV (includes stable `entityId` + `width` + `area`):
+
+```bash
+uv run --with ezdxf python extract_green_squares_only.py \
+  --input sample.dxf \
+  --output green_squares_only_filtered.dxf \
+  --csv-output sample/footing_bboxes.csv \
+  --details-csv-output squares_details.csv
+```
