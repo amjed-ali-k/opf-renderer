@@ -7,6 +7,15 @@ This project contains two main scripts:
 
 The first script assigns raw marker detections to world-space bounding boxes. The second script visualizes the result in Rerun and also exports annotated images.
 
+## GUI + Windows EXE
+
+There is also a small GUI so non-technical users can run the assignment without scripting:
+
+- `assign_markers_to_bboxes_qt.py` (Qt / PySide6 GUI)
+- `assign_markers_to_bboxes_cli.py` (CLI copy of the original script)
+
+To build a Windows `.exe`, see `packaging/BUILD_WINDOWS_EXE.md`.
+
 ## Prerequisites
 
 Install `uv` cli.
@@ -22,7 +31,7 @@ Run `uv sync` to install dependencies.
 
 ## Script 1: Assign Markers To BBoxes
 
-[`assign_markers_to_bboxes.py`](/home/amjed/git/opf-renderer/assign_markers_to_bboxes.py) is the production executable.
+`[assign_markers_to_bboxes.py](/home/amjed/git/opf-renderer/assign_markers_to_bboxes.py)` is the production executable.
 
 It does the following:
 
@@ -36,16 +45,13 @@ It does the following:
 ### Inputs
 
 - `--marker-csv`
-  Raw marker detections. Expected rows:
-  `image_name,marker_id,x_px,y_px[,score]`
-
+Raw marker detections. Expected rows:
+`image_name,marker_id,x_px,y_px[,score]`
 - `--bbox-csv`
-  World-space bbox CSV. Required columns:
-  `id,bottomX,bottomY,topX,topY`
-
+World-space bbox CSV. Required columns:
+`id,bottomX,bottomY,topX,topY`
   Optional columns:
   `bottomZ,topZ`
-
 - OPF metadata, provided either by:
   - `--opf-root <opf_export_dir>`
   - or `--opf-json-dir <opf_export_dir/opf_files>`
@@ -98,7 +104,7 @@ footing_102_marker_7
 
 ## Script 2: View BBoxes In Rerun
 
-[`view_papers_in_rerun.py`](/home/amjed/git/opf-renderer/view_papers_in_rerun.py) visualizes the prefixed CSV together with the OPF point cloud.
+`[view_papers_in_rerun.py](/home/amjed/git/opf-renderer/view_papers_in_rerun.py)` visualizes the prefixed CSV together with the OPF point cloud.
 
 It does the following:
 
@@ -114,13 +120,11 @@ It does the following:
 ### Inputs
 
 - `--csv`
-  Output from `assign_markers_to_bboxes.py`
-
+Output from `assign_markers_to_bboxes.py`
 - `--opf`
-  Path to `project.opf` or the OPF export root directory containing it
-
+Path to `project.opf` or the OPF export root directory containing it
 - `--output-images`
-  Directory for annotated image export
+Directory for annotated image export
 
 ### Example
 
@@ -192,7 +196,7 @@ uv run view_papers_in_rerun.py \
 
 ## Script 3: Extract Green Square Footings From DXF
 
-[`extract_green_squares_only.py`](/home/amjed/git/opf-renderer/extract_green_squares_only.py) reads a DXF (e.g. `sample.dxf`), detects **green square boxes** (AutoCAD Color Index \(ACI\)=3), and exports:
+`[extract_green_squares_only.py](/home/amjed/git/opf-renderer/extract_green_squares_only.py)` reads a DXF (e.g. `sample.dxf`), detects **green square boxes** (AutoCAD Color Index ACI=3), and exports:
 
 - a DXF containing **only** those detected squares (as closed `LWPOLYLINE`s on layer `GREEN_SQUARES_ONLY`)
 - a bbox CSV compatible with `sample/paper_bboxes.csv` format, using IDs `footing_001`, `footing_002`, … with `bottomZ=topZ=0`
@@ -228,3 +232,4 @@ uv run --with ezdxf python extract_green_squares_only.py \
   --csv-output sample/footing_bboxes.csv \
   --details-csv-output squares_details.csv
 ```
+
