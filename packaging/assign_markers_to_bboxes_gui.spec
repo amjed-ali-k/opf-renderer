@@ -5,12 +5,16 @@ from __future__ import annotations
 # Build on Windows:
 #   pyinstaller --clean --noconfirm packaging/assign_markers_to_bboxes_gui.spec
 
-import sys
 from pathlib import Path
 
 block_cipher = None
 
-project_root = Path(__file__).resolve().parents[1]
+# NOTE:
+# When PyInstaller executes this spec via `exec(...)`, `__file__` may not be defined
+# depending on how it is invoked (e.g. via wrappers). PyInstaller always provides
+# `SPECPATH` which points at the directory containing this spec file.
+spec_dir = Path(globals().get("SPECPATH", ".")).resolve()
+project_root = spec_dir.parent
 entry = project_root / "assign_markers_to_bboxes_qt.py"
 
 a = Analysis(
